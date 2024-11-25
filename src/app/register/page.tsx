@@ -15,6 +15,7 @@ export default function Register() {
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
+      name: "",
       username: "",
       email: "",
       role: undefined,
@@ -29,7 +30,7 @@ export default function Register() {
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
-      <div className="hidden bg-muted lg:block">
+      <div className="hidden bg-muted lg:block lg:inset-0">
         <Image
           src="/placeholder.svg"
           alt="Image"
@@ -38,9 +39,9 @@ export default function Register() {
           className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
-      <div className="flex items-center justify-center py-12">
-        <div className="grid w-[400px] gap-6">
-          <div className="grid gap-2 text-center">
+      <div className="flex items-center justify-center py-12 overflow-y-auto h-screen">
+        <div className="flex flex-col w-[400px] gap-6">
+          <div className="flex flex-col pt-20 gap-2 text-center">
             <h1 className="text-3xl font-bold">Register</h1>
             <p className="text-balance text-muted-foreground">
               Enter your data below to register to your account
@@ -49,11 +50,28 @@ export default function Register() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
               <FormField
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Your Given Name<span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter your name" required />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
                 name="username"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>
+                      Username<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter your username" required />
                     </FormControl>
@@ -66,7 +84,9 @@ export default function Register() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>
+                      Email<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter your email" type="email" required />
                     </FormControl>
@@ -79,7 +99,9 @@ export default function Register() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>
+                      Role<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <SelectTrigger>
@@ -100,7 +122,9 @@ export default function Register() {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>
+                      Password<span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter your password" type="password" required />
                     </FormControl>

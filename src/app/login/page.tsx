@@ -1,35 +1,55 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import Image from "next/image"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import Image from "next/image";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
-  email: z.string().email({message: "Input valid email"}),
+  username: z.string().min(3, { message: "Username must bet at least 3 characters" }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
 });
 
 export default function Login() {
-  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
-  })
+  });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log("Form Data:", values)
-    // Handle login submission
-  }
+  const router = useRouter();
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const username = values.username;
+      const password = values.password;
+
+      const res = await signIn("credentials", {
+        username,
+        password,
+        callbackUrl: "/dashboard/admin"
+      });
+
+      if(!res?.ok){
+        // console.log("salahnya")
+        // toast.error("Email atau password salah", {autoClose: 1500})
+      }
+
+    } catch (error) {
+      console.error("Login failed:", error);
+      // Handle error, e.g., show an alert or set error state
+    }
+  };
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
@@ -38,19 +58,19 @@ export default function Login() {
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-balance text-muted-foreground">
-              Enter your email below to login to your account
+              Enter your username below to login to your account
             </p>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
               <FormField
-                name="email"
+                name="username"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="m@example.com" type="email" required />
+                      <Input {...field} placeholder="sobathukumuser" type="text" required />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -75,7 +95,7 @@ export default function Login() {
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Don't have an account?{" "}
             <Link href="/register" className="underline">
               Sign up
             </Link>
@@ -92,5 +112,5 @@ export default function Login() {
         />
       </div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,9 @@
 import { z } from "zod";
 
 export const registerFormSchema = z.object({
+    name: z
+      .string()
+      .min(3, { message: "Your name must be at least 3 characters"}),
     username: z
       .string()
       .min(3, { message: "Username must be at least 3 characters" })
