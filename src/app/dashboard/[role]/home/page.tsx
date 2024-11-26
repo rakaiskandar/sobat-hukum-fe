@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+"use client"
+
 import { signOut, useSession } from "next-auth/react";
 
 export default function Dashboard() {
@@ -14,13 +15,10 @@ export default function Dashboard() {
       
       {session ? (
         <div>
-          <p>Hello, {session.user?.name}</p>
-          <Button onClick={handleSignOut} className="w-full">
-            Sign Out
-          </Button>
+          <p>Hello, {session.user?.username}</p>
         </div>
       ) : (
-        <p>Please log in to access the dashboard.</p>
+        <p>Please <a href="/login">log in</a> to access the dashboard.</p>
       )}
     </div>
   );

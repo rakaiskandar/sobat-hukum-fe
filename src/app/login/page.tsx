@@ -8,11 +8,10 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 const formSchema = z.object({
-  username: z.string().min(3, { message: "Username must bet at least 3 characters" }),
+  username: z.string().min(3, { message: "Username must be at least 3 characters" }),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
@@ -27,17 +26,15 @@ export default function Login() {
     },
   });
 
-  const router = useRouter();
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const username = values.username;
-      const password = values.password;
+      const { username, password } = values;
 
+      // Attempt to log in using NextAuth
       const res = await signIn("credentials", {
         username,
         password,
-        callbackUrl: "/dashboard/admin"
+        callbackUrl: "/dashboard"
       });
 
       if(!res?.ok){
@@ -58,7 +55,7 @@ export default function Login() {
           <div className="grid gap-2 text-center">
             <h1 className="text-3xl font-bold">Login</h1>
             <p className="text-balance text-muted-foreground">
-              Enter your username below to login to your account
+              Enter your username below to log in to your account
             </p>
           </div>
           <Form {...form}>

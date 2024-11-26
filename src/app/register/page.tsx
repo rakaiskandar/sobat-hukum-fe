@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { registerFormSchema } from "@/lib/validation/form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import axios from "axios"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 
 export default function Register() {
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -18,15 +21,61 @@ export default function Register() {
       name: "",
       username: "",
       email: "",
-      role: undefined,
+      role: "client",
       password: "",
+      phoneNumber: ""
     },
   })
 
-  const onSubmit = (values: z.infer<typeof registerFormSchema>) => {
-    console.log("Form Data:", values)
-    // Handle form submission
-  }
+  const router = useRouter();
+
+  const onSubmit = async (values: z.infer<typeof registerFormSchema>) => {
+    try {
+      // Prepare payload based on backend expectations
+      const payload = {
+        name: values.name,
+        username: values.username,
+        email: values.email,
+        role: values.role,
+        password: values.password,
+        phone_number: values.phoneNumber, // Adjusted key to match backend naming convention
+      };
+  
+      console.log("Sending payload:", payload); // Debugging step
+  
+      // Register the user
+      const res = await axios.post("http://localhost:8000/api/v1/register/", payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (res.status === 201) {
+        // Automatically sign in the user
+        const loginRes = await signIn("credentials", {
+          username: values.username,
+          password: values.password,
+          redirect: false, // Avoid auto-redirect to control routing manually
+        });
+  
+        if (loginRes?.ok) {
+          // Redirect based on role
+          if (values.role === "client") {
+            router.push("/dashboard/client");
+          } 
+          
+          if (values.role === "lawyer") {
+            router.push("/dashboard/lawyer");
+          }
+          
+        } else {
+          console.error("Login failed:", loginRes?.error);
+        }
+      }
+    } catch (error: any) {
+      console.error("Registration failed:", error.response?.data || error.message);
+    }
+  };  
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
@@ -41,7 +90,7 @@ export default function Register() {
       </div>
       <div className="flex items-center justify-center py-12 overflow-y-auto h-screen">
         <div className="flex flex-col w-[400px] gap-6">
-          <div className="flex flex-col pt-20 gap-2 text-center">
+          <div className="flex flex-col pt-32 gap-2 text-center">
             <h1 className="text-3xl font-bold">Register</h1>
             <p className="text-balance text-muted-foreground">
               Enter your data below to register to your account
@@ -89,6 +138,21 @@ export default function Register() {
                     </FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter your email" type="email" required />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="phoneNumber"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Phone Number<span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter your phone number" type="text" required />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
