@@ -59,7 +59,7 @@ const SidebarDashboard = () => {
           ))}
         </div>
 
-        <Button onClick={() => signOut()} variant={"destructive"} className="mr-3">
+        <Button onClick={() => signOut({callbackUrl: '/'})} variant={"destructive"} className="mr-3">
           Logout
         </Button>
       </div>

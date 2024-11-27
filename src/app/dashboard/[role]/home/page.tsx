@@ -1,13 +1,9 @@
 "use client"
 
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Dashboard() {
   const { data: session } = useSession();
-
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/" });
-  };
 
   return (
     <div className="mx-3">

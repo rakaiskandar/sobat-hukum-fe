@@ -9,10 +9,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters" }),
-  password: z.string().min(8, {
+  password: z.string().min(6, {
     message: "Password must be at least 8 characters.",
   }),
 });
@@ -47,6 +50,14 @@ export default function Login() {
       // Handle error, e.g., show an alert or set error state
     }
   };
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams?.get("unauthorized") === "true") {
+      toast.error("You must log in to access that page.");
+    }
+  }, [searchParams]);
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
@@ -94,7 +105,7 @@ export default function Login() {
           <div className="mt-4 text-center text-sm">
             Don't have an account?{" "}
             <Link href="/register" className="underline">
-              Sign up
+              Register
             </Link>
           </div>
         </div>

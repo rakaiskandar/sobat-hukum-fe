@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import * as React from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const HOME_ROUTE = "/";
 
@@ -12,7 +13,6 @@ const AuthLoading = ({ children }: { children: React.ReactNode }) => {
   const { data: session } = useSession({
     required: true,
     onUnauthenticated: () => {
-      //   toast.error("Please login first");
       push(HOME_ROUTE);
     },
   });

@@ -27,8 +27,6 @@ export default function Register() {
     },
   })
 
-  const router = useRouter();
-
   const onSubmit = async (values: z.infer<typeof registerFormSchema>) => {
     try {
       // Prepare payload based on backend expectations
@@ -58,19 +56,9 @@ export default function Register() {
           redirect: false, // Avoid auto-redirect to control routing manually
         });
   
-        if (loginRes?.ok) {
-          // Redirect based on role
-          if (values.role === "client") {
-            router.push("/dashboard/client");
-          } 
-          
-          if (values.role === "lawyer") {
-            router.push("/dashboard/lawyer");
-          }
-          
-        } else {
+        if (!loginRes?.ok) {
           console.error("Login failed:", loginRes?.error);
-        }
+        } 
       }
     } catch (error: any) {
       console.error("Registration failed:", error.response?.data || error.message);
@@ -204,7 +192,7 @@ export default function Register() {
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
             <Link href="/login" className="underline">
-              Sign in
+              Login
             </Link>
           </div>
         </div>
