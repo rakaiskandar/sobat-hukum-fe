@@ -86,14 +86,13 @@ const Navbar = () => {
           <div className="flex gap-4">
             <Button
               onClick={() => router.push("/login")}
-              variant="default"
+              variant="outline"
               className="w-auto"
             >
               Login
             </Button>
             <Button
               onClick={() => router.push("/register")}
-              variant="outline"
               className="w-auto"
             >
               Register

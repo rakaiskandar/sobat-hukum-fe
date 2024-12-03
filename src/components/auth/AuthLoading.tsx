@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import * as React from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
 const HOME_ROUTE = "/";
 

@@ -6,6 +6,7 @@ import { DefaultSession } from "next-auth";
 interface IUser extends DefaultUser {
   id: string;
   username: string;
+  profile: string;
   role: Role;
   accessToken: string;
   refreshToken: string;

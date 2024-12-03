@@ -57,6 +57,7 @@ const options: NextAuthOptions = {
       if (user) {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
+        token.name = user.name;
         token.username = user.username;
         token.role = user.role;
         token.id = user.id; // Ensure the role is added to the JWT token
@@ -68,7 +69,9 @@ const options: NextAuthOptions = {
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
         session.user = {
+          name: token.name,
           username: token.username,
+          profile: token.profile,
           id: token.id,
           role: token.role,
           accessToken: token.accessToken,

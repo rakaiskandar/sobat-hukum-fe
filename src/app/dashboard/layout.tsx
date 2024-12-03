@@ -6,12 +6,14 @@ import React from 'react'
 const Layout = ({ children }: { children: React.ReactNode}) => {
   return (
     <AuthLoading>
-    <div className="min-h-screen w-screen flex">
-        <SidebarDashboard />
-        <div className="flex-1">
-          <HeaderDashboard />
-          <div className="px-8 py-4">{children}</div>
-        </div>
+      <div className="min-h-screen w-screen flex">
+          <SidebarDashboard />
+          <main className="flex-1">
+            <HeaderDashboard />
+            <div className="px-4 py-6">
+              {children}
+            </div>
+          </main>
       </div>
     </AuthLoading>
   )
