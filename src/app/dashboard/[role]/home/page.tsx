@@ -11,7 +11,7 @@ export default function Dashboard() {
       
       {session ? (
         <div>
-          <p>Hello, {session.user?.username}</p>
+          <p>Hello</p>
         </div>
       ) : (
         <p>Please <a href="/login">log in</a> to access the dashboard.</p>

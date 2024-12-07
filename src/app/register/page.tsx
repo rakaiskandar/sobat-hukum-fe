@@ -1,18 +1,30 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import Image from "next/image"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { registerFormSchema } from "@/lib/validation/form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import axios from "axios"
-import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import Image from "next/image";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { registerFormSchema } from "@/lib/validation/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { getSession, signIn } from "next-auth/react";
 
 export default function Register() {
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -22,48 +34,97 @@ export default function Register() {
       username: "",
       email: "",
       role: "client",
+      age: "",
+      gender: "L",
       password: "",
-      phoneNumber: ""
+      phone_number: "",
     },
-  })
+  });
 
   const onSubmit = async (values: z.infer<typeof registerFormSchema>) => {
     try {
-      // Prepare payload based on backend expectations
+      // Prepare payload for registration
       const payload = {
         name: values.name,
         username: values.username,
+        age: Number(values.age),
+        gender: values.gender,
         email: values.email,
         role: values.role,
         password: values.password,
-        phone_number: values.phoneNumber, // Adjusted key to match backend naming convention
+        phone_number: values.phone_number,
       };
-  
-      console.log("Sending payload:", payload); // Debugging step
-  
+
+      console.log("Sending registration payload:", payload);
+
       // Register the user
-      const res = await axios.post("http://localhost:8000/api/v1/register/", payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/register/",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       if (res.status === 201) {
-        // Automatically sign in the user
+        // Automatically log in the user
         const loginRes = await signIn("credentials", {
           username: values.username,
           password: values.password,
-          redirect: false, // Avoid auto-redirect to control routing manually
+          callbackUrl: '/dashboard',
         });
-  
-        if (!loginRes?.ok) {
+
+        if (loginRes?.ok) {
+          // Fetch the session to get the token
+          const session = await getSession();
+
+          if (session?.user.accessToken) {
+            const token = session.user.accessToken;
+
+            console.log("Login successful. Access token:", token);
+
+            // Role-specific API call
+            const roleEndpoint = values.role === "client" ? "/clients" : "/lawyers";
+            const rolePayload = { user_id: session?.user.id };
+
+            const roleRes = await axios.post(
+              `http://localhost:8000/api/v1${roleEndpoint}/`,
+              rolePayload,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            if (roleRes.status === 201) {
+              console.log(
+                `${values.role} data inserted successfully:`,
+                roleRes.data
+              );
+            } else {
+              console.error(
+                "Failed to insert role-specific data:",
+                roleRes.data
+              );
+            }
+          } else {
+            console.error("Token not found in session");
+          }
+        } else {
           console.error("Login failed:", loginRes?.error);
-        } 
+        }
       }
     } catch (error: any) {
-      console.error("Registration failed:", error.response?.data || error.message);
+      console.error(
+        "Error during registration:",
+        error.response?.data || error.message
+      );
     }
-  };  
+  };
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
@@ -76,16 +137,16 @@ export default function Register() {
           className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
-      <div className="flex items-center justify-center py-12 overflow-y-auto h-screen">
+      <div className="flex items-center justify-center py-12 overflow-y-auto">
         <div className="flex flex-col w-[400px] gap-6">
-          <div className="flex flex-col pt-32 gap-2 text-center">
+          <div className="flex flex-col gap-2 text-center">
             <h1 className="text-3xl font-bold">Register</h1>
             <p className="text-balance text-muted-foreground">
               Enter your data below to register to your account
             </p>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
               <FormField
                 name="name"
                 control={form.control}
@@ -95,7 +156,56 @@ export default function Register() {
                       Your Given Name<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter your name" required />
+                      <Input
+                        {...field}
+                        placeholder="Enter your name"
+                        required
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="age"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Your Age<span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter your age"
+                        required
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="gender"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Gender<span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select your gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="L">Laki - Laki</SelectItem>
+                          <SelectItem value="P">Perempuan</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -110,7 +220,11 @@ export default function Register() {
                       Username<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter your username" required />
+                      <Input
+                        {...field}
+                        placeholder="Enter your username"
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -125,14 +239,19 @@ export default function Register() {
                       Email<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter your email" type="email" required />
+                      <Input
+                        {...field}
+                        placeholder="Enter your email"
+                        type="email"
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
-                name="phoneNumber"
+                name="phone_number"
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
@@ -140,7 +259,12 @@ export default function Register() {
                       Phone Number<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter your phone number" type="text" required />
+                      <Input
+                        {...field}
+                        placeholder="Enter your phone number"
+                        type="text"
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -155,7 +279,10 @@ export default function Register() {
                       Role<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select your role" />
                         </SelectTrigger>
@@ -178,7 +305,12 @@ export default function Register() {
                       Password<span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter your password" type="password" required />
+                      <Input
+                        {...field}
+                        placeholder="Enter your password"
+                        type="password"
+                        required
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -198,5 +330,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-  )
+  );
 }

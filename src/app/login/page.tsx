@@ -15,7 +15,7 @@ import { useEffect } from "react";
 
 const formSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters" }),
-  password: z.string().min(6, {
+  password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
 });
@@ -42,7 +42,6 @@ export default function Login() {
 
       if(!res?.ok){
         // console.log("salahnya")
-        // toast.error("Email atau password salah", {autoClose: 1500})
       }
 
     } catch (error) {

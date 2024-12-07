@@ -58,6 +58,7 @@ const options: NextAuthOptions = {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.name = user.name;
+        token.isVerified = user.isVerified;
         token.username = user.username;
         token.role = user.role;
         token.id = user.id; // Ensure the role is added to the JWT token
@@ -73,6 +74,7 @@ const options: NextAuthOptions = {
           username: token.username,
           profile: token.profile,
           id: token.id,
+          isVerified: token.isVerified,
           role: token.role,
           accessToken: token.accessToken,
           refreshToken: token.refreshToken,
