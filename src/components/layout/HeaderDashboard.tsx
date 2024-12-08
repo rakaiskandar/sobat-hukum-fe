@@ -77,7 +77,7 @@ const HeaderDashboard = () => {
           </div>
         </div>
       </nav>
-      {!session?.user.isVerified ? (
+      {!session?.user.is_verified && pathname !== `/${basePath}/verify` ? (
         <div className="mx-3 mt-2">
           <Alert
             className="border-yellow-300 bg-yellow-50 text-yellow-700 p-4 rounded-md shadow-lg flex items-center"

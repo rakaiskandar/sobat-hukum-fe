@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
 import AppIcon from "../AppIcon";
 
 const mainNavbar = [
@@ -20,15 +19,10 @@ const mainNavbar = [
     name: "Our Lawyer",
     href: "/our-lawyer",
   },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
 ];
 
 const Navbar = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -85,17 +79,19 @@ const Navbar = () => {
           {/* Buttons */}
           <div className="flex gap-4">
             <Button
-              onClick={() => router.push("/login")}
               variant="outline"
               className="w-auto"
             >
-              Login
+              <Link href="/login">
+                Login
+              </Link>
             </Button>
             <Button
-              onClick={() => router.push("/register")}
               className="w-auto"
             >
-              Register
+              <Link href="/register">
+                Register
+              </Link>
             </Button>
           </div>
         </div>
@@ -128,22 +124,24 @@ const Navbar = () => {
               <Button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  router.push("/login");
                 }}
                 variant="default"
                 className="w-full"
               >
-                Login
+                <Link href="/login">
+                  Login
+                </Link>
               </Button>
               <Button
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  router.push("/register");
                 }}
                 variant="outline"
                 className="w-full"
               >
-                Register
+                <Link href="/register">
+                  Register
+                </Link>
               </Button>
             </div>
           </div>

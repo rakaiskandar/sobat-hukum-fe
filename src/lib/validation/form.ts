@@ -21,3 +21,25 @@ export const registerFormSchema = z.object({
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
 });
+
+export const clientSchema = z.object({
+  nik: z
+    .string()
+    .length(16, { message: "NIK must be 16 digits" })
+    .regex(/^\d+$/, { message: "NIK must contain only numbers" }),
+});
+
+export const lawyerSchema = z.object({
+  license_number: z
+    .string()
+    .min(5, { message: "License number must be at least 5 characters" }),
+  specialization: z
+    .string()
+    .min(3, { message: "Specialization must be at least 3 characters" }),
+  experience_years: z
+    .number()
+    .positive({ message: "Experience must be a positive number" })
+    .min(1, { message: "Experience must be at least 1 year" }),
+  availability: z
+    .enum(["available", "unavailable"], { message: "Invalid availability status" }),
+});

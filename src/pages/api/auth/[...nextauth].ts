@@ -8,6 +8,7 @@ import { Role } from "@/constant/role";
 interface User extends NextAuthUser {
   username: string;
   role: Role;
+  is_verified: Boolean;
   refreshToken: string;
   accessToken: string;
 }
@@ -35,7 +36,7 @@ const options: NextAuthOptions = {
           );
 
           const user = res.data; // Adjust to ensure you're getting user data correctly
-
+      
           if (user && user.access && user.refresh) {
             // Return user with access and refresh tokens
             return {
@@ -58,7 +59,7 @@ const options: NextAuthOptions = {
         token.accessToken = user.accessToken;
         token.refreshToken = user.refreshToken;
         token.name = user.name;
-        token.isVerified = user.isVerified;
+        token.is_verified = user.is_verified;
         token.username = user.username;
         token.role = user.role;
         token.id = user.id; // Ensure the role is added to the JWT token
@@ -74,7 +75,7 @@ const options: NextAuthOptions = {
           username: token.username,
           profile: token.profile,
           id: token.id,
-          isVerified: token.isVerified,
+          is_verified: token.is_verified,
           role: token.role,
           accessToken: token.accessToken,
           refreshToken: token.refreshToken,

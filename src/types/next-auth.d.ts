@@ -8,7 +8,7 @@ interface IUser extends DefaultUser {
   username: string;
   profile: string;
   role: Role;
-  isVerified: Boolean;
+  is_verified: Boolean;
   accessToken: string;
   refreshToken: string;
 }
