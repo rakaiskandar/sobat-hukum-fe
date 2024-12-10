@@ -37,9 +37,6 @@ export const lawyerSchema = z.object({
     .string()
     .min(3, { message: "Specialization must be at least 3 characters" }),
   experience_years: z
-    .number()
-    .positive({ message: "Experience must be a positive number" })
+    .string()
     .min(1, { message: "Experience must be at least 1 year" }),
-  availability: z
-    .enum(["available", "unavailable"], { message: "Invalid availability status" }),
 });

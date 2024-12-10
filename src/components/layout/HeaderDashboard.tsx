@@ -69,9 +69,7 @@ const HeaderDashboard = () => {
           <div className="flex items-center gap-6">
             <HeaderProfile
               img={
-                session?.user.profile
-                  ? session.user.profile
-                  : "https://github.com/shadcn.png"
+                session?.user?.profile || "/astronaut.png"
               }
             />
           </div>

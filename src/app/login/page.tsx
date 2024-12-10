@@ -40,13 +40,9 @@ export default function Login() {
         callbackUrl: "/dashboard"
       });
 
-      if(!res?.ok){
-        // console.log("salahnya")
-      }
-
-    } catch (error) {
-      console.error("Login failed:", error);
-      // Handle error, e.g., show an alert or set error state
+    } catch (error: any) {
+      console.error(error);
+      toast.error("An error occured");
     }
   };
 

@@ -55,8 +55,6 @@ export default function Register() {
         phone_number: values.phone_number,
       };
 
-      console.log("Sending registration payload:", payload);
-
       // Register the user
       const res = await axios.post(
         "http://localhost:8000/api/v1/register/",
@@ -76,45 +74,7 @@ export default function Register() {
           callbackUrl: '/dashboard',
         });
 
-        if (loginRes?.ok) {
-          // Fetch the session to get the token
-          const session = await getSession();
-
-          if (session?.user.accessToken) {
-            const token = session.user.accessToken;
-
-            console.log("Login successful. Access token:", token);
-
-            // Role-specific API call
-            const roleEndpoint = values.role === "client" ? "/clients" : "/lawyers";
-            const rolePayload = { user_id: session?.user.id };
-
-            const roleRes = await axios.post(
-              `http://localhost:8000/api/v1${roleEndpoint}/`,
-              rolePayload,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-
-            if (roleRes.status === 201) {
-              console.log(
-                `${values.role} data inserted successfully:`,
-                roleRes.data
-              );
-            } else {
-              console.error(
-                "Failed to insert role-specific data:",
-                roleRes.data
-              );
-            }
-          } else {
-            console.error("Token not found in session");
-          }
-        } else {
+        if (!loginRes?.ok) {
           console.error("Login failed:", loginRes?.error);
         }
       }
