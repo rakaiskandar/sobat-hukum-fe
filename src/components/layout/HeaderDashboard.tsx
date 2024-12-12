@@ -9,6 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import axios from "axios";
 
 const HeaderDashboard = () => {
   const { data: session } = useSession();
@@ -20,6 +21,32 @@ const HeaderDashboard = () => {
     emoji: "",
     greet: "",
   });
+  const [client, setClient] = useState<any>([]);
+  const [lawyer, setLawyer] = useState<any>([]);
+
+  const getUserDetail = async () => {
+    try {
+      if (session?.user.role !== "admin") {
+        const role = session?.user.role === "client" ? "clients" : "lawyers";
+  
+        const res = await axios.get(
+          `http://localhost:8000/api/v1/${role}/details/`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session?.user.accessToken}`,
+            },
+          }
+        );
+  
+        const user = res.data;
+        setClient(user);
+        setLawyer(user);
+      }
+    } catch (error) {
+      console.error("Error during fetch:", error);
+    }
+  };
 
   useEffect(() => {
     // Set locale for dayjs
@@ -51,6 +78,8 @@ const HeaderDashboard = () => {
         greet: "Selamat Malam, ",
       });
     }
+
+    getUserDetail();
   }, []);
 
   return (
@@ -62,39 +91,43 @@ const HeaderDashboard = () => {
             {/* Greeting and session values are shown only after hydration */}
             <span className="text-3xl">{greeting.emoji}</span>
             {greeting.greet}
-            <span>
-              {session?.user.name ? session.user.name : "Loading..."}
-            </span>
+            <span>{session?.user.name ? session.user.name : "Loading..."}</span>
           </div>
           <div className="flex items-center gap-6">
-            <HeaderProfile
-              img={
-                session?.user?.profile || "/astronaut.png"
-              }
-            />
+            <HeaderProfile img={session?.user?.profile || "/astronaut.png"} />
           </div>
         </div>
       </nav>
-      {!session?.user.is_verified && pathname !== `/${basePath}/verify` ? (
+      {session?.user.role != "admin" && !session?.user.is_verified && pathname !== `/${basePath}/verify` ? (
         <div className="mx-3 mt-2">
           <Alert
             className="border-yellow-300 bg-yellow-50 text-yellow-700 p-4 rounded-md shadow-lg flex items-center"
-            role="alert">
+            role="alert"
+          >
             <AlertCircle className="h-6 w-6 text-yellow-600" />
-            <div>
+            {client.nik || lawyer.license_number ? (
+              <div>
+                <AlertDescription className="font-bold">
+                  Kamu belum terverifikasi
+                </AlertDescription>
+                <AlertDescription className="text-sm">
+                  Tunggu verifikasi dari admin
+                </AlertDescription>
+              </div>
+            ) : (
+              <div>
               <AlertTitle className="font-bold">Kamu belum terverifikasi</AlertTitle>
-              <AlertDescription className="text-sm">
-                Silakan verifikasi{" "}
-                <Link href={`/${basePath}/verify`} className="font-semibold text-blue-500 hover:text-blue-700">
-                  disini
-                </Link>
-              </AlertDescription>
-            </div>
+                <AlertDescription className="text-sm">
+                  Silakan verifikasi{" "}
+                  <Link href={`/${basePath}/verify`} className="font-semibold text-blue-500 hover:text-blue-700">
+                    disini
+                  </Link>
+                </AlertDescription>
+              </div>
+            )}
           </Alert>
         </div>
-      ) : (
-        null
-      )}
+      ) : null}
     </>
   );
 };

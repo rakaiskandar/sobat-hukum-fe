@@ -8,6 +8,9 @@ import { usePathname } from "next/navigation";
 import { CircleUserRound, File, History, House, Scale } from "lucide-react";
 import AppIcon from "../AppIcon";
 import { Role } from "@/constant/role";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 
 type SidebarItem = {
   name: string;
@@ -89,10 +92,30 @@ const SidebarDashboard = () => {
             </Link>
           ))}
         </div>
-
-        <Button onClick={() => signOut({callbackUrl: '/'})} variant={"destructive"} className="mr-3">
-          Logout
-        </Button>
+        
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="destructive" className="mr-3">Logout</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Logout</DialogTitle>
+              <DialogDescription>
+                Apakah kamu yakin ingin keluar?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="secondary">
+                  Tidak
+                </Button>
+              </DialogClose>
+              <Button onClick={() => signOut({callbackUrl: '/'})} variant="default">
+                Iya
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </nav>
   );
