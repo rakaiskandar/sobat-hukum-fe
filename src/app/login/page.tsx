@@ -37,8 +37,15 @@ export default function Login() {
       const res = await signIn("credentials", {
         username,
         password,
-        callbackUrl: "/dashboard"
+        redirect: false
       });
+
+      if (res?.ok) {
+        // Login successful
+        window.location.href = '/dashboard';
+      } else {
+        toast.error("Invalid username or password. Please try again.");
+      }
 
     } catch (error: any) {
       console.error(error);
