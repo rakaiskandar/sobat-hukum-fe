@@ -114,7 +114,7 @@ export default function Login() {
       </div>
       <div className="hidden bg-muted lg:block">
         <Image
-          src="/placeholder.svg"
+          src="Lawyer-rafiki 1.svg"
           alt="Image"
           width="1920"
           height="1080"

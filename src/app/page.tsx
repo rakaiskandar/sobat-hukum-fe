@@ -11,7 +11,7 @@ export default function Home() {
             <button class="mt-6 px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Mulai Sekarang</button>
         </div>
         <div class="mt-8">
-            <img src="Landing page main pict.jpeg" alt="Gambar Utama" class="mx-auto w-[1165px] h-[640px]">
+            <img src="Hero Image.png" alt="Gambar Utama" class="mx-auto w-[1165px] h-[640px]">
         </div>
     </div>
 
