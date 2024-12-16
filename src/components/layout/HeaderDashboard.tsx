@@ -79,7 +79,7 @@ const HeaderDashboard = () => {
 
   return (
     <>
-      <nav className="p-4 h-[110px] border-b flex flex-col justify-between">
+      <nav className="p-4 h-[110px] border-b flex flex-col justify-between bg-white">
         <h4>{formatDate || "Loading date..."}</h4>
         <div className="flex items-center justify-between">
           <div className="text-lg font-semibold">

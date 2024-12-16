@@ -6,11 +6,11 @@ import React from 'react'
 const Layout = ({ children }: { children: React.ReactNode}) => {
   return (
     <AuthLoading>
-      <div className="min-h-screen w-full flex">
+      <div className="min-h-screen w-full flex bg-slate-50">
           <SidebarDashboard />
           <main className="flex-1">
             <HeaderDashboard />
-            <div className="p-3">
+            <div className="p-5">
               {children}
             </div>
           </main>

@@ -161,49 +161,59 @@ export default function Home() {
       <div className="py-12 bg-white">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-left text-gray-800">FAQ</h2>
-          <div className="mt-8 space-y-4">
+          <div className="mt-8">
             <Accordion type="single" collapsible>
               <AccordionItem value="faq1">
                 <AccordionTrigger className="w-[1165px] text-base bg-yellow-400 mx-auto p-6 rounded-lg flex justify-between items-center">
-                  <span className="text-blue-500">
+                  <span className="text-blue-600">
                     Apa itu Sobat Hukum?
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="mt-2 text-base rounded p-4 text-gray-600">
-                  Sobat Hukum adalah ...
+                    Sobat Hukum adalah platform digital yang bertujuan untuk mempermudah akses masyarakat terhadap layanan hukum. Kami menyediakan berbagai informasi, 
+                    panduan, serta layanan konsultasi dan pengurusan dokumen legal yang dapat diakses secara mudah dan cepat. Sobat Hukum hadir untuk membantu Anda 
+                    menyelesaikan permasalahan hukum dengan solusi yang praktis, terpercaya, dan sesuai dengan regulasi yang berlaku.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="faq2">
                 <AccordionTrigger className="w-[1165px] text-base bg-yellow-400 mx-auto p-6 rounded-lg flex justify-between items-center">
-                  <span className="text-blue-500">
+                  <span className="text-blue-600">
                     Bagaimana cara penggunaannya?
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="mt-2 text-base rounded p-4 text-gray-600">
-                  Penggunaannya adalah ...
+                1. Registrasi: Buat akun dengan mengisi data pribadi atau masuk menggunakan akun yang sudah ada.
+                2. Ajukan Permintaan: Isi formulir sesuai kebutuhan, unggah dokumen yang diperlukan, dan ikuti langkah pembayaran jika diperlukan.
+                3. Konsultasi atau Proses Layanan: Anda akan terhubung dengan ahli hukum atau tim kami yang akan membantu penyelesaian masalah Anda.
+                4. Selesaikan & Pantau Status: Pantau progres layanan Anda langsung melalui akun Sobat Hukum.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="faq3">
                 <AccordionTrigger className="w-[1165px] text-base bg-yellow-400 mx-auto p-6 rounded-lg flex justify-between items-center">
-                  <span className="text-blue-500">
+                  <span className="text-blue-600">
                     Kebijakan Pengguna
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="mt-2 text-base rounded p-4 text-gray-600">
-                  Kebijakan pengguna sebagai berikut ...
+                Sobat Hukum mengutamakan keamanan dan kenyamanan Anda. Beberapa poin kebijakan pengguna kami meliputi:
+                - Privasi Data: Informasi pribadi Anda akan kami jaga dengan standar keamanan tinggi dan tidak akan dibagikan tanpa izin.
+                - Kewajiban Pengguna: Anda wajib memberikan informasi yang akurat dan sesuai kebutuhan layanan. Kesalahan data dapat memengaruhi hasil layanan.
+                - Batasan Layanan: Sobat Hukum memberikan informasi hukum dan layanan administratif, namun tidak mewakili Anda di pengadilan tanpa perjanjian khusus.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="faq4">
                 <AccordionTrigger className="w-[1165px] text-base bg-yellow-400 mx-auto p-6 rounded-lg flex justify-between items-center">
                   <span className="text-blue-600">
-                    Regulasi dan Kepatuhan?
+                    Regulasi dan Kepatuhan
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="mt-2 text-base rounded p-4 text-gray-600">
-                  Regulasi dan kepatuhan meliputi ...
+                Sobat Hukum berkomitmen untuk mematuhi semua regulasi dan peraturan hukum yang berlaku, termasuk:
+                - Perlindungan Data Pribadi: Kami memastikan kepatuhan terhadap Undang-Undang Perlindungan Data Pribadi (UU PDP).
+                - Etika Hukum: Semua layanan kami diberikan oleh profesional yang terdaftar dan sesuai dengan standar hukum dan etika profesi.
                 </AccordionContent>
               </AccordionItem>
 
@@ -214,7 +224,9 @@ export default function Home() {
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="mt-2 text-base rounded p-4 text-gray-600">
-                  Persiapan meliputi ...
+                - Pembuatan Dokumen Legal: Seperti perjanjian kerja, kontrak, surat kuasa, dan dokumen lainnya.
+                - Pengurusan Izin: Termasuk izin usaha, akta pendirian perusahaan, dan izin-izin lainnya.
+                - Konsultasi Hukum: Dapatkan panduan langsung dari ahli hukum terkait kasus atau kebutuhan hukum Anda.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
