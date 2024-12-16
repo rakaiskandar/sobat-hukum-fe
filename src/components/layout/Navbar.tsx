@@ -99,7 +99,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-gray-100 py-4 mt-2">
+        <div className="md:hidden bg-gray-50 py-4 mt-2">
           <div className="flex flex-col items-start px-4">
             {mainNavbar.map((link) => {
               const isActive = pathname === link.href;

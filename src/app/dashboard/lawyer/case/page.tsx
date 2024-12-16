@@ -83,19 +83,26 @@ export default function CaseApprove() {
 
   // Menangani kondisi saat caseData kosong
   if (caseData.length === 0) {
-    return <div>Tidak ada Kasus..</div>; // Menampilkan pesan jika tidak ada kasus
+    return (
+      <div>
+        <h2 className="text-xl font-bold">Tidak ada kasus..</h2>
+      </div> // Menampilkan pesan jika tidak ada kasus
+    );
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-col flex-wrap gap-4">
+      <h2 className="text-2xl font-semibold text-primary mb-3">
+        Laman Kasus Publik
+      </h2>
       {caseData.map((caseItem, index) => (
-        <Card key={index} className="w-[350px]">
+        <Card key={index} className="w-[450px]">
           <CardHeader>
             <CardTitle>Case History</CardTitle>
             <CardDescription>Details of the case.</CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
+            <div>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor={`title-${index}`}>Title</Label>
@@ -133,7 +140,7 @@ export default function CaseApprove() {
                   Approve Case
                 </button>
               </div>
-            </form>
+            </div>
           </CardContent>
         </Card>
       ))}

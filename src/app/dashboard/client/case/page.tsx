@@ -3,8 +3,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
-export default function User() {
+export default function Case() {
   const { data: session } = useSession();
   const [file, setFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
@@ -17,17 +20,22 @@ export default function User() {
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [lawyers, setLawyers] = useState<{ lawyer_id: string; name: string }[]>([]);
+  const [lawyers, setLawyers] = useState<{ lawyer_id: string; name: string }[]>(
+    []
+  );
 
   // Fetch list lawyer saat komponen di-mount
   useEffect(() => {
     const fetchLawyers = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/v1/lawyers/list/", {
-          headers: {
-            Authorization: `Bearer ${session?.user.accessToken}`,
-          },
-        });
+        const res = await axios.get(
+          "http://127.0.0.1:8000/api/v1/lawyers/list/",
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user.accessToken}`,
+            },
+          }
+        );
         setLawyers(res.data);
       } catch (error) {
         console.error("Error fetching lawyers:", error);
@@ -39,7 +47,9 @@ export default function User() {
   }, [session]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -110,7 +120,10 @@ export default function User() {
       }
     } catch (error: any) {
       console.error("Error uploading case:", error);
-      setError(error.response?.data?.detail || "An error occurred while uploading data.");
+      setError(
+        error.response?.data?.detail ||
+          "An error occurred while uploading data."
+      );
     } finally {
       setLoading(false);
     }
@@ -118,86 +131,82 @@ export default function User() {
 
   return (
     <div className="mx-3">
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold text-primary mb-3">Upload Case dan Dokumen</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-          <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            value={formData.title}
-            onChange={handleInputChange}
-            className="border p-2 rounded"
-            required
-          />
-          <input
-            type="text"
-            name="case_type"
-            placeholder="Case Type"
-            value={formData.case_type}
-            onChange={handleInputChange}
-            className="border p-2 rounded"
-            required
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={formData.description}
-            onChange={handleInputChange}
-            className="border p-2 rounded"
-            required
-          ></textarea>
+      <h2 className="text-2xl font-semibold text-primary mb-3">
+        Pengajuan Kasus
+      </h2>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+        <Input
+          type="text"
+          name="title"
+          placeholder="Title"
+          value={formData.title}
+          onChange={handleInputChange}
+          required
+        />
+        <Input
+          type="text"
+          name="case_type"
+          placeholder="Case Type"
+          value={formData.case_type}
+          onChange={handleInputChange}
+          required
+        />
+        <Textarea
+          name="description"
+          placeholder="Description"
+          value={formData.description}
+          onChange={handleInputChange}
+          required
+        ></Textarea>
 
-          {/* Select Lawyer (Opsional) */}
-          <label>
-            Select Lawyer (Optional):
-            <select
-              name="lawyer_id"
-              value={formData.lawyer_id}
-              onChange={handleInputChange}
-              className="border p-2 rounded"
-            >
-              <option value="">-- None --</option>
-              {lawyers.map((lawyer) => (
-                <option key={lawyer.lawyer_id} value={lawyer.lawyer_id}>
-                  {lawyer.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name="is_anonymous"
-              checked={formData.is_anonymous}
-              onChange={handleInputChange}
-            />
-            <span>Submit as Anonymous</span>
-          </label>
-          <label>
-            File Upload:
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className="block mt-1"
-              required
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={loading}
-            className={`${
-              loading ? "bg-gray-400" : "bg-primary hover:bg-blue-700"
-            } text-white py-2 px-4 rounded transition`}
+        {/* Select Lawyer (Opsional) */}
+        <label>
+          Select Lawyer (Optional):
+          <select
+            name="lawyer_id"
+            value={formData.lawyer_id}
+            onChange={handleInputChange}
           >
-            {loading ? "Uploading..." : "Submit Case & Upload File"}
-          </button>
-          {formSuccess && <p className="text-green-500">{formSuccess}</p>}
-          {error && <p className="text-red-500">{error}</p>}
-        </form>
-      </div>
+            <option value="">-- None --</option>
+            {lawyers.map((lawyer) => (
+              <option key={lawyer.lawyer_id} value={lawyer.lawyer_id}>
+                {lawyer.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            name="is_anonymous"
+            checked={formData.is_anonymous}
+            onChange={handleInputChange}
+          />
+          <span>Submit as Anonymous</span>
+        </label>
+        <label>
+          File Upload:
+          <Input
+            type="file"
+            accept=".pdf"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            className="block mt-1"
+            required
+          />
+        </label>
+        <Button
+          type="submit"
+          disabled={loading}
+          className={`${
+            loading ? "bg-gray-400" : "bg-primary hover:bg-blue-700"
+          } text-white py-2 px-4 rounded transition`}
+        >
+          {loading ? "Uploading..." : "Ajukan Kasus"}
+        </Button>
+        {formSuccess && <p className="text-green-500">{formSuccess}</p>}
+        {error && <p className="text-red-500">{error}</p>}
+      </form>
     </div>
   );
 }

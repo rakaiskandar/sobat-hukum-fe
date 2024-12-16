@@ -67,7 +67,7 @@ export type CaseCol = {
     },
     {
         id: "actions",
-        cell: ({ row }) => <DataTableRowActions row={row} />
+        cell: ({ row }) => <DataTableRowActions row={row} id="user_id"/>
     }
 
   ];

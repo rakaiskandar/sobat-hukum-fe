@@ -84,6 +84,9 @@ export default function CaseHistory() {
 
   return (
     <div className="flex flex-wrap gap-4">
+      <h2 className="text-2xl font-semibold text-primary mb-3">
+        Riwayat Kasus
+      </h2>
       {caseData.map((caseItem, index) => (
         <Card key={index} className="w-[350px]">
           <CardHeader>

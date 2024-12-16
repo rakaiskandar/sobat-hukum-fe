@@ -16,6 +16,7 @@ export default function CaseHistory() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   // Fungsi untuk mengambil data case history
   const getCaseHistory = async () => {
@@ -59,7 +60,10 @@ export default function CaseHistory() {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-col flex-wrap gap-4">
+      <h2 className="text-2xl font-semibold text-primary mb-3">
+        Riwayat Kasus
+      </h2>
       {caseData.map((caseItem, index) => (
         <Card key={index} className="w-[350px]">
           <CardHeader>
@@ -67,7 +71,7 @@ export default function CaseHistory() {
             <CardDescription>Details of the case.</CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
+            <div>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor={`title-${index}`}>Title</Label>
@@ -100,20 +104,12 @@ export default function CaseHistory() {
               <Button
                 className="mt-4"
                 onClick={() => {
-                  // Mengambil case_id dengan getValue jika tersedia, fallback ke caseItem.case_id
-                  const caseId = caseItem.getValue ? caseItem.getValue("case_id") : caseItem.case_id;
-
-                  if (caseId) {
-                    console.log(`Navigating to /dashboard/lawyer/case/${caseId}`);
-                    router.push(`/dashboard/lawyer/case/${caseId}`);
-                  } else {
-                    console.error("Case ID not found!");
-                  }
+                  router.push(pathname! + "/" + `${caseItem?.case_id}`);
                 }}
               >
                 Detail
               </Button>
-            </form>
+            </div>
           </CardContent>
         </Card>
       ))}
