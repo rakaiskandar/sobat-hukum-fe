@@ -40,7 +40,7 @@ export default function Case() {
                 columns={columns}
                 data={userData}
                 filterColumn="title"
-                id="case_id"
+                // id="case_id"
             />
             {error && (
             <div className="text-red-500 mt-4">
