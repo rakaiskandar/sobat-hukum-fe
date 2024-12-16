@@ -12,6 +12,7 @@ import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
+import AppIcon from "@/components/AppIcon";
 
 const formSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters" }),
@@ -62,63 +63,68 @@ export default function Login() {
   }, [searchParams]);
 
   return (
-    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
-      <div className="flex items-center justify-center py-12">
-        <div className="grid w-[400px] gap-6">
-          <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Login</h1>
-            <p className="text-balance text-muted-foreground">
-              Enter your username below to log in to your account
-            </p>
-          </div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-              <FormField
-                name="username"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="sobathukumuser" type="text" required />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="password"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Enter your password" type="password" required />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Login
-              </Button>
-            </form>
-          </Form>
-          <div className="mt-4 text-center text-sm">
-            Don't have an account?{" "}
-            <Link href="/register" className="underline">
-              Register
-            </Link>
+    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 bg-white">
+      <div className="flex flex-col gap-10 py-12">
+        <div className="flex flex-col justify-between gap-20 px-8">
+          <Link href={"/"}>
+            <AppIcon />
+          </Link>
+          <div className="grid w-[400px] gap-6 ml-14">
+            <div className="grid gap-2">
+              <h1 className="text-3xl font-bold">Login</h1>
+              <p className="text-balance text-muted-foreground">
+                Enter your username below to log in to your account
+              </p>
+            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                <FormField
+                  name="username"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="sobathukumuser" type="text" required />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="password"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Enter your password" type="password" required />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
+              </form>
+            </Form>
+            <div className="mt-4 text-center text-sm">
+              Don't have an account?{" "}
+              <Link href="/register" className="underline">
+                Register
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block">
+      <div className="hidden lg:block">
         <Image
-          src="/placeholder.svg"
+          src="/Lawyer-rafiki 1.svg"
           alt="Image"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          width={1080}
+          height={720}
+          className="object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
     </div>
