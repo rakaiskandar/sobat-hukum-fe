@@ -8,7 +8,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 
-export default function CaseApprove() {
+export default function CaseApproveOpen() {
   const { data: session } = useSession();
   const [caseData, setCaseData] = useState<any[]>([]); // State untuk menyimpan array data kasus
   const [loading, setLoading] = useState<boolean>(true); // State loading
@@ -20,7 +20,7 @@ export default function CaseApprove() {
       setError(null); // Reset error before fetching
       setLoading(true); // Set loading true saat mulai fetch
   
-      const res = await axios.get("http://127.0.0.1:8000/api/v1/cases/assign/", {
+      const res = await axios.get("http://127.0.0.1:8000/api/v1/cases/open/", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session?.user.accessToken}`, // Menggunakan token dari session
@@ -93,7 +93,7 @@ export default function CaseApprove() {
   return (
     <div className="flex flex-col flex-wrap gap-4">
       <h2 className="text-2xl font-semibold text-primary mb-3">
-        Laman Kasus Publik
+        Laman Kasus Open Publik
       </h2>
       {caseData.map((caseItem, index) => (
         <Card key={index} className="w-[450px]">

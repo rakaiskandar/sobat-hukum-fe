@@ -45,6 +45,11 @@ const mainSidebar: SidebarItem[] = [
     role: [Role.admin, Role.client, Role.lawyer],
   },
   {
+    name: "Open Case",
+    href: "open_case",
+    role: [Role.lawyer],
+  },
+  {
     name: "History",
     href: "history",
     role: [Role.client, Role.lawyer],
@@ -56,6 +61,7 @@ const extractIcon = (name: string) => {
     if (name === "Lawyer") return <Scale width={20} />;
     if (name === "User") return <CircleUserRound width={20} />;
     if (name === "Case") return <File width={20} />;
+    if (name === "Open Case") return <File width={20} />;
     if (name === "History") return <History width={20} />;
     if (name === "Profil") return <CircleUserRound width={20} />
   };
