@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/table/DataTable";
 import { columns } from "./columns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
@@ -11,7 +11,12 @@ export default function User() {
   const [userData, setUserData] = useState<any[]>([]); // Default to an empty array
   const [error, setError] = useState<string | null>(null);
 
-  const getUser = async () => {
+  const getUser = useCallback(async () => {
+    if (!session?.user?.accessToken) {
+      setError("User is not authenticated.");
+      return;
+    }
+
     try {
       setError(null); // Reset error before fetching
 
@@ -27,11 +32,11 @@ export default function User() {
       console.error("Error fetching user data:", err);
       setError(err?.response?.data?.message || "Failed to fetch user data");
     } 
-  };
+  }, [session?.user.accessToken]);
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [getUser]);
 
   return (
     <div className="mx-3">
@@ -40,14 +45,12 @@ export default function User() {
         columns={columns}
         data={userData}
         filterColumn="name"
-        id="user_id"
       />
       {error && (
         <div className="text-red-500 mt-4">
           <p>{error}</p>
         </div>
       )}
-      
     </div>
   );
 }

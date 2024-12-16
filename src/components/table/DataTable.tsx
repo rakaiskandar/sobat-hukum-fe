@@ -27,20 +27,17 @@ import {
 
 import { DataTablePagination } from "./DataTablePagination"
 import { DataTableToolbar } from "./DataTableToolbar"
-import { usePathname, useRouter } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   filterColumn: string,
-  id: string,
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filterColumn,
-  id
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -49,8 +46,6 @@ export function DataTable<TData, TValue>({
     []
   )
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const router = useRouter();
-  const pathname = usePathname();
 
   const table = useReactTable({
     data,
@@ -102,7 +97,6 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  onClick={() => router.push(pathname! + "/" + row.getValue(id))}
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer"
                 >

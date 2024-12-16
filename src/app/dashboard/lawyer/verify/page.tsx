@@ -60,8 +60,9 @@ export default function Verify() {
         throw new Error(response.data.message || "Failed to update the data.");
       }
 
-      toast.success("Data kamu telah berhasil ditambahkan! tunggu verifikasi dari admin");
-      router.push(`/dashboard/${session?.user.role}/home`);
+      toast.success("Data kamu telah diverifikasi!");
+
+      window.location.href = '/dashboard';
     } catch (error) {
       console.error("Error during update:", error);
       toast.error("An error occurred during verification.");

@@ -6,7 +6,7 @@ import { DefaultSession } from "next-auth";
 interface IUser extends DefaultUser {
   id: string;
   username: string;
-  profile: string;
+  profile_picture: string;
   role: Role;
   is_verified: Boolean;
   accessToken: string;
