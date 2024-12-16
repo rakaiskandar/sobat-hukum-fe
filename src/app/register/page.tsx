@@ -25,6 +25,7 @@ import { registerFormSchema } from "@/lib/validation/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import AppIcon from "@/components/AppIcon";
 
 export default function Register() {
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -87,23 +88,25 @@ export default function Register() {
   };
 
   return (
-    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
-      <div className="hidden bg-muted lg:block lg:inset-0">
+    <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2 bg-white">
+      <div className="hidden lg:block lg:inset-0">
+        <Link href={"/"}>
+          <div className="m-8">
+            <AppIcon />
+          </div>
+        </Link>
         <Image
-          src="/placeholder.svg"
+          src="/Lawyer-pana 1.svg"
           alt="Image"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          width={1080}
+          height={720}
+          className="h-screen object-cover dark:brightness-[0.2] dark:grayscale"
         />
       </div>
-      <div className="flex items-center justify-center py-12 overflow-y-auto">
+      <div className="flex items-center pl-24 py-14 overflow-y-auto">
         <div className="flex flex-col w-[400px] gap-6">
-          <div className="flex flex-col gap-2 text-center">
-            <h1 className="text-3xl font-bold">Register</h1>
-            <p className="text-balance text-muted-foreground">
-              Enter your data below to register to your account
-            </p>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl lg:text-4xl font-bold">Pendaftaran</h1>
           </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">

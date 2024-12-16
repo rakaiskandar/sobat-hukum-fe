@@ -3,12 +3,12 @@ import Navbar from "./Navbar";
 
 const LandingPageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex flex-col min-h-screen mx-8 my-2">
+    <div className="flex flex-col min-h-screen">
       {/* Navbar */}
       <Navbar />
 
       {/* Main Content */}
-      <main>{children}</main>
+      <main className="flex-grow">{children}</main>
 
       {/* Footer */}
       <Footer />

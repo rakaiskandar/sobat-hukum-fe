@@ -22,7 +22,7 @@ import { baseUrl } from "@/constant/api";
 import { getImageData } from "@/lib/utils";
 import { clientProfileSchema } from "@/lib/validation/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
