@@ -27,7 +27,7 @@ const HeaderDashboard = () => {
   const [isDetailsFilled, setIsDetailsFilled] = useState<boolean>(false); // Track if NIK or License is filled
 
   const profilePictureUrl = session?.user?.profile_picture
-    ? `${baseUrl}${session.user.profile_picture}`
+    ? `${baseUrl}${session.user.profile_picture || userDetails?.profile_picture}`
     : "/astronaut.png";
 
   const getUserDetail = async () => {
@@ -57,6 +57,8 @@ const HeaderDashboard = () => {
 
   // Trigger fetching user details whenever session updates
   useEffect(() => {
+    if (!session) return;
+
     dayjs.locale("id");
     setFormatDate(dayjs().format("dddd, D MMMM YYYY"));
 
@@ -86,8 +88,8 @@ const HeaderDashboard = () => {
             <span className="text-3xl">{greeting.emoji}</span>
             {greeting.greet}
             <span>
-              {session?.user.name || "Loading..."}
-              {(session?.user.role === "admin" || session?.user.is_verified) && (
+              {session?.user.name || userDetails?.name || "Loading..."}
+              {(session?.user.role === "admin" || session?.user.is_verified || userDetails?.is_verified) && (
                 <CheckCircle2 width={30} className="inline -mt-2 text-primary" />
               )}
             </span>

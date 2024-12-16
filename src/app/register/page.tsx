@@ -76,7 +76,7 @@ export default function Register() {
         });
 
         if (!loginRes?.ok) {
-          console.error("Login failed:", loginRes?.error);
+          // console.error("Login failed:", loginRes?.error);
         }
       }
     } catch (error: any) {
