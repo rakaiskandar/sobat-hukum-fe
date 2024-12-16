@@ -83,7 +83,7 @@ export default function CaseHistory() {
   }
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-col flex-wrap gap-4">
       <h2 className="text-2xl font-semibold text-primary mb-3">
         Riwayat Kasus
       </h2>
