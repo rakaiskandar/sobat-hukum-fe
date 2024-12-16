@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  font-family: 'Inter';
+}
+
 @layer base {
   :root {
     --background: 210 50% 96%; /* Light blue background */

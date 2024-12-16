@@ -2,8 +2,8 @@ import AppIcon from "../AppIcon";
 
 const Footer = () => {
     return (
-      <footer className="w-full py-8">
-        <div className="mx-auto flex flex-col md:flex-row justify-between items-start md:items-center">
+      <footer className="py-8 bg-white">
+        <div className="container mx-auto flex flex-col md:flex-row justify-between items-start md:items-center px-4">
           {/* Left Section: Site Name + Social Media */}
           <div className="flex flex-col items-start gap-3 mb-6 md:mb-0">
             <AppIcon />

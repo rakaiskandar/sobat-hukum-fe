@@ -8,15 +8,15 @@ import AppIcon from "../AppIcon";
 
 const mainNavbar = [
   {
-    name: "Home",
+    name: "Beranda",
     href: "/",
   },
   {
-    name: "About",
+    name: "Tentang",
     href: "/about",
   },
   {
-    name: "Our Lawyer",
+    name: "Lawyer Kami",
     href: "/our-lawyer",
   },
 ];
@@ -30,7 +30,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="">
+    <nav className="bg-white py-4">
       {/* Navbar Header */}
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo Section */}
