@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CircleUserRound, File, History, House, Scale } from "lucide-react";
+import { CircleUser, CircleUserRound, File, History, House, Scale } from "lucide-react";
 import AppIcon from "../AppIcon";
 import { Role } from "@/constant/role";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -23,6 +23,11 @@ const mainSidebar: SidebarItem[] = [
     name: "Home",
     href: "home",
     role: [Role.admin, Role.client, Role.lawyer],
+  },
+  {
+    name: "Profil",
+    href: "profile",
+    role: [Role.client, Role.lawyer]
   },
   {
     name: "Lawyer",
@@ -52,6 +57,7 @@ const extractIcon = (name: string) => {
     if (name === "User") return <CircleUserRound width={20} />;
     if (name === "Case") return <File width={20} />;
     if (name === "History") return <History width={20} />;
+    if (name === "Profil") return <CircleUserRound width={20} />
   };
 
 const SidebarDashboard = () => {

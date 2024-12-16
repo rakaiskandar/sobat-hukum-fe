@@ -24,7 +24,7 @@ import { z } from "zod";
 import { registerFormSchema } from "@/lib/validation/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { getSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 export default function Register() {
   const form = useForm<z.infer<typeof registerFormSchema>>({
