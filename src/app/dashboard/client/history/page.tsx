@@ -18,7 +18,8 @@ export default function CaseHistory() {
   // Mengambil client_id dari API saat komponen pertama kali dimuat
   const getClientDetails = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/v1/clients/details/", {
+      setError(null); // Reset error sebelum request baru
+      const res = await axios.get("http://127.0.0.1:8000/api/v1/users/me/", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session?.user.accessToken}`, // Menggunakan token dari session
@@ -30,13 +31,14 @@ export default function CaseHistory() {
     } catch (err: any) {
       console.error("Error fetching client details:", err);
       setError(err?.response?.data?.message || "Failed to fetch client details");
+      setLoading(false); // Pastikan loading diubah menjadi false jika terjadi error
     }
   };
 
   // Fetch data kasus setelah client_id berhasil diperoleh
   const getCase = async () => {
     try {
-      setError(null); // Reset error before fetching
+      setError(null); // Reset error sebelum request baru
 
       const res = await axios.get(`http://127.0.0.1:8000/api/v1/cases/history/${clientId}/`, {
         headers: {
@@ -46,17 +48,20 @@ export default function CaseHistory() {
       });
 
       setCaseData(res.data); // Menyimpan data kasus dari API
-      setLoading(false); // Mengubah loading menjadi false setelah data didapat
     } catch (err: any) {
       console.error("Error fetching case data:", err);
       setError(err?.response?.data?.message || "Failed to fetch case data");
-      setLoading(false);
+    } finally {
+      setLoading(false); // Pastikan loading selalu diubah menjadi false setelah selesai
     }
   };
 
   // Menjalankan kedua fungsi secara berurutan setelah komponen dimuat
   useEffect(() => {
-    getClientDetails();
+    const fetchData = async () => {
+      await getClientDetails();
+    };
+    fetchData();
   }, []); // Menjalankan hanya sekali ketika komponen dimuat
 
   useEffect(() => {
@@ -76,7 +81,7 @@ export default function CaseHistory() {
   if (caseData.length === 0) {
     return <div>No data available.</div>; // Menampilkan pesan jika tidak ada data
   }
-  
+
   return (
     <div className="flex flex-wrap gap-4">
       {caseData.map((caseItem, index) => (
@@ -98,7 +103,7 @@ export default function CaseHistory() {
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor={`created_at-${index}`}>Created At</Label>
-                  <div>{dayjs(caseItem.created_at).format("dddd, D MMMM YYYY") || "---"}</div> {/* Menampilkan value Created By */}
+                  <div>{dayjs(caseItem.created_at).format("dddd, D MMMM YYYY") || "---"}</div> {/* Menampilkan value Created At */}
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor={`case_type-${index}`}>Case Type</Label>

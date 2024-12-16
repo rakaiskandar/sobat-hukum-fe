@@ -18,24 +18,33 @@ export default function CaseApprove() {
   const getCase = async () => {
     try {
       setError(null); // Reset error before fetching
-
+      setLoading(true); // Set loading true saat mulai fetch
+  
       const res = await axios.get("http://127.0.0.1:8000/api/v1/cases/assign/", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session?.user.accessToken}`, // Menggunakan token dari session
         },
       });
-
-      const filteredCases = res.data.filter((caseItem: any) => caseItem.status !== "approved"); // Filter untuk hanya menampilkan kasus yang belum di-approve
-
-      setCaseData(filteredCases); // Menyimpan data kasus dari API
-      setLoading(false); // Mengubah loading menjadi false setelah data didapat
+  
+      console.log("API Response:", res.data); // Debugging respons
+  
+      if (Array.isArray(res.data)) {
+        const filteredCases = res.data.filter((caseItem: any) => caseItem.status !== "approved");
+        setCaseData(filteredCases);
+      } else if (Array.isArray(res.data.results)) {
+        const filteredCases = res.data.results.filter((caseItem: any) => caseItem.status !== "approved");
+        setCaseData(filteredCases);
+      } else {
+      }
     } catch (err: any) {
       console.error("Error fetching case data:", err);
       setError(err?.response?.data?.message || "Failed to fetch case data");
+    } finally {
       setLoading(false);
     }
   };
+  
 
   // Fungsi untuk approve case
   const approveCase = async (caseId: string) => {
@@ -72,8 +81,9 @@ export default function CaseApprove() {
     return <div>{error}</div>; // Menampilkan pesan error jika ada kesalahan
   }
 
+  // Menangani kondisi saat caseData kosong
   if (caseData.length === 0) {
-    return <div>No data available.</div>; // Menampilkan pesan jika tidak ada data
+    return <div>Tidak ada Kasus..</div>; // Menampilkan pesan jika tidak ada kasus
   }
 
   return (
