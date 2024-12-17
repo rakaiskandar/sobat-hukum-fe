@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { baseUrl } from "@/constant/api";
+import { baseUrl, media } from "@/constant/api";
 import { getImageData } from "@/lib/utils";
 import { lawyerProfileSchema } from "@/lib/validation/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,8 +49,8 @@ export default function Profile() {
   });
 
   const profilePictureUrl = session?.user?.profile_picture
-    ? `${baseUrl}${session.user.profile_picture}`
-    : "/astronaut.png";
+      ? `${media}${session.user.profile_picture || userData?.profile_picture}`
+      : "/astronaut.png";
     
   const onSubmit = async (values: z.infer<typeof lawyerProfileSchema>) => {
     setLoading(true);
@@ -146,6 +146,7 @@ export default function Profile() {
     };
 
     getProfile();
+    console.log(profilePictureUrl)
   }, [session, form]);
 
   if (loading) {
