@@ -61,9 +61,7 @@ export default function CaseHistory() {
 
   return (
     <div className="flex flex-col flex-wrap gap-4">
-      <h2 className="text-2xl font-semibold text-primary mb-3">
-        Riwayat Kasus
-      </h2>
+      <h2 className="text-2xl font-semibold text-primary mb-3">Riwayat Kasus</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
         {caseData.map((caseItem, index) => (
           <Card key={index} className="w-[350px]">
@@ -93,6 +91,11 @@ export default function CaseHistory() {
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor={`description-${index}`}>Description</Label>
                     <div>{caseItem.description || "---"}</div>
+                  </div>
+                  {/* No. Hp Client */}
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`phone_number-${index}`}>No. Hp Client</Label>
+                    <div>{caseItem.phone_number || "---"}</div>
                   </div>
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor={`status-${index}`}>Status</Label>
