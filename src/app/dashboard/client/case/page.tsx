@@ -116,30 +116,10 @@ export default function Case() {
       if (caseResponse.status !== 201) {
         throw new Error("Failed to submit case.");
       }
-
-      const caseId = caseResponse.data.case_id; // Ambil case_id dari response
       
       // Step 2: Upload file ke API /api/v1/document/ dengan case_id
       if (!file) {
         throw new Error("Please select a file to upload.");
-      }
-
-      const fileFormData = new FormData();
-      fileFormData.append("file", file);
-      fileFormData.append("case_id", caseId); // Sertakan case_id
-      const fileResponse = await axios.post(
-        "http://127.0.0.1:8000/api/v1/document/",
-        fileFormData,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.user.accessToken}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (caseResponse.status !== 201) {
-        throw new Error("Failed to submit case.");
       }
 
       const caseId = caseResponse.data.case_id; // Ambil case_id dari respons
