@@ -10,7 +10,7 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import axios from "axios";
-import { baseUrl } from "@/constant/api";
+import { baseUrl, media } from "@/constant/api";
 
 const HeaderDashboard = () => {
   const { data: session } = useSession();
@@ -27,7 +27,7 @@ const HeaderDashboard = () => {
   const [isDetailsFilled, setIsDetailsFilled] = useState<boolean>(false); // Track if NIK or License is filled
 
   const profilePictureUrl = session?.user?.profile_picture
-    ? `${baseUrl}${session.user.profile_picture || userDetails?.profile_picture}`
+    ? `${media}${session.user.profile_picture || userDetails?.profile_picture}`
     : "/astronaut.png";
 
   const getUserDetail = async () => {

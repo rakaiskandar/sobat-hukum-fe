@@ -98,7 +98,7 @@ export default function CaseDetail({ params }: { params: Promise<{ case_id: stri
             {documents.map((doc) => (
               <li key={doc.document_id}>
                 <a
-                  href={`${baseUrl}${doc.file_path}`}
+                  href={`http://localhost:8000${doc.file_path}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-500 underline"

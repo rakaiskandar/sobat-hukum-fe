@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { baseUrl } from "@/constant/api";
+import { baseUrl, media } from "@/constant/api";
 import { getImageData } from "@/lib/utils";
 import { clientProfileSchema } from "@/lib/validation/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,8 +53,8 @@ export default function Profile() {
   });
 
   const profilePictureUrl = session?.user?.profile_picture
-    ? `${baseUrl}${userData?.profile_picture}`
-    : "/astronaut.png";
+      ? `${media}${session.user.profile_picture || userData?.profile_picture}`
+      : "/astronaut.png";
     
   const onSubmit = async (values: z.infer<typeof clientProfileSchema>) => {
     setLoading(true);
@@ -158,13 +158,13 @@ export default function Profile() {
 
   return (
     <div className="mx-3 bg-white rounded-lg">
-      <h2 className="text-2xl font-semibold text-primary">Profil</h2>
       <div>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="border rounded-sm p-4 flex flex-col w-full gap-2 mt-2"
           >
+      <h2 className="text-2xl font-semibold text-primary">Profil</h2>
             <div className="w-40 h-40 rounded-full bg-gray-200 overflow-hidden">
               <Image
                 src={preview || profilePictureUrl}
