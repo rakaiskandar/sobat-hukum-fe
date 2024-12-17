@@ -23,7 +23,7 @@ export default function Case() {
     case_type: "",
     description: "",
     is_anonymous: false,
-    lawyer_id: "", // Lawyer ID default kosong (opsional)
+    lawyer_id: "",
   });
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +32,6 @@ export default function Case() {
     []
   );
 
-  // Fetch list lawyer saat komponen di-mount
   useEffect(() => {
     const fetchLawyers = async () => {
       try {
@@ -80,7 +79,7 @@ export default function Case() {
       case_type: "",
       description: "",
       is_anonymous: false,
-      lawyer_id: "", // Reset lawyer_id
+      lawyer_id: "",
     });
     setFile(null);
     setLoading(false);
@@ -91,12 +90,6 @@ export default function Case() {
     setLoading(true);
     setFormSuccess(null);
     setError(null);
-
-    if (!file) {
-      setError("Please select a file to upload.");
-      setLoading(false);
-      return;
-    }
 
     try {
       // Step 1: Kirim data kasus ke API /api/v1/cases/
@@ -134,6 +127,32 @@ export default function Case() {
       const fileFormData = new FormData();
       fileFormData.append("file", file);
       fileFormData.append("case_id", caseId); // Sertakan case_id
+      const fileResponse = await axios.post(
+        "http://127.0.0.1:8000/api/v1/document/",
+        fileFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user.accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (caseResponse.status !== 201) {
+        throw new Error("Failed to submit case.");
+      }
+
+      const caseId = caseResponse.data.case_id; // Ambil case_id dari respons
+
+      // Step 2: Upload file ke API /api/v1/document/ dengan case_id
+      if (!file) {
+        throw new Error("Please select a file to upload.");
+      }
+
+      const fileFormData = new FormData();
+      fileFormData.append("file", file);
+      fileFormData.append("case_id", caseId); // Sertakan case_id
+
       const fileResponse = await axios.post(
         "http://127.0.0.1:8000/api/v1/document/",
         fileFormData,
@@ -224,6 +243,7 @@ export default function Case() {
           />
           <span>Kirim sebagai Anonim</span>
         </label>
+
         <label>
           File Upload:
           <Input
@@ -234,6 +254,7 @@ export default function Case() {
             required
           />
         </label>
+
         <Button
           type="submit"
           disabled={loading}
@@ -241,8 +262,9 @@ export default function Case() {
             loading ? "bg-gray-400" : "bg-primary hover:bg-blue-700"
           } text-white py-2 px-4 rounded transition`}
         >
-          {loading ? "Uploading..." : "Ajukan Kasus"}
+          {loading ? "Submitting..." : "Ajukan Kasus"}
         </Button>
+
         {formSuccess && <p className="text-green-500">{formSuccess}</p>}
         {error && <p className="text-red-500">{error}</p>}
       </form>
