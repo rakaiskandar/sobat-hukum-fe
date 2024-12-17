@@ -6,6 +6,14 @@ import { useSession } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import toast from "react-hot-toast";
 
 export default function Case() {
   const { data: session } = useSession();
@@ -91,19 +99,44 @@ export default function Case() {
     }
 
     try {
+      // Step 1: Kirim data kasus ke API /api/v1/cases/
       const caseFormData = new FormData();
       caseFormData.append("title", formData.title);
       caseFormData.append("case_type", formData.case_type);
       caseFormData.append("description", formData.description);
       caseFormData.append("is_anonymous", String(formData.is_anonymous));
       if (formData.lawyer_id) {
-        caseFormData.append("lawyer_id", formData.lawyer_id); // Hanya append jika tidak kosong
+        caseFormData.append("lawyer_id", formData.lawyer_id);
       }
-      caseFormData.append("file", file);
 
       const caseResponse = await axios.post(
         "http://127.0.0.1:8000/api/v1/cases/",
         caseFormData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${session?.user.accessToken}`,
+          },
+        }
+      );
+
+      if (caseResponse.status !== 201) {
+        throw new Error("Failed to submit case.");
+      }
+
+      const caseId = caseResponse.data.case_id; // Ambil case_id dari response
+      
+      // Step 2: Upload file ke API /api/v1/document/ dengan case_id
+      if (!file) {
+        throw new Error("Please select a file to upload.");
+      }
+
+      const fileFormData = new FormData();
+      fileFormData.append("file", file);
+      fileFormData.append("case_id", caseId); // Sertakan case_id
+      const fileResponse = await axios.post(
+        "http://127.0.0.1:8000/api/v1/document/",
+        fileFormData,
         {
           headers: {
             Authorization: `Bearer ${session?.user.accessToken}`,
@@ -112,17 +145,18 @@ export default function Case() {
         }
       );
 
-      if (caseResponse.status === 201) {
+      if (fileResponse.status === 201) {
         setFormSuccess("Case and file uploaded successfully!");
         resetForm();
+        toast.success("Pengajuan kasus berhasil");
       } else {
-        throw new Error("Failed to upload case.");
+        throw new Error("Failed to upload file.");
       }
     } catch (error: any) {
-      console.error("Error uploading case:", error);
+      console.error("Error:", error);
       setError(
         error.response?.data?.detail ||
-          "An error occurred while uploading data."
+          "An error occurred while submitting the data."
       );
     } finally {
       setLoading(false);
@@ -138,7 +172,7 @@ export default function Case() {
         <Input
           type="text"
           name="title"
-          placeholder="Title"
+          placeholder="Judul Kasus"
           value={formData.title}
           onChange={handleInputChange}
           required
@@ -146,14 +180,14 @@ export default function Case() {
         <Input
           type="text"
           name="case_type"
-          placeholder="Case Type"
+          placeholder="Tipe Kasus"
           value={formData.case_type}
           onChange={handleInputChange}
           required
         />
         <Textarea
           name="description"
-          placeholder="Description"
+          placeholder="Deskripsi"
           value={formData.description}
           onChange={handleInputChange}
           required
@@ -161,19 +195,24 @@ export default function Case() {
 
         {/* Select Lawyer (Opsional) */}
         <label>
-          Select Lawyer (Optional):
-          <select
-            name="lawyer_id"
+          Pilih Pengacara (Optional):
+          <Select
             value={formData.lawyer_id}
-            onChange={handleInputChange}
+            onValueChange={(value) =>
+              setFormData({ ...formData, lawyer_id: value })
+            }
           >
-            <option value="">-- None --</option>
-            {lawyers.map((lawyer) => (
-              <option key={lawyer.lawyer_id} value={lawyer.lawyer_id}>
-                {lawyer.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="--None--" />
+            </SelectTrigger>
+            <SelectContent>
+              {lawyers.map((lawyer) => (
+                <SelectItem key={lawyer.lawyer_id} value={lawyer.lawyer_id}>
+                  {lawyer.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </label>
 
         <label className="flex items-center space-x-2">
@@ -183,7 +222,7 @@ export default function Case() {
             checked={formData.is_anonymous}
             onChange={handleInputChange}
           />
-          <span>Submit as Anonymous</span>
+          <span>Kirim sebagai Anonim</span>
         </label>
         <label>
           File Upload:

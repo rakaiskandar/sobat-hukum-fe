@@ -87,58 +87,60 @@ export default function CaseHistory() {
       <h2 className="text-2xl font-semibold text-primary mb-3">
         Riwayat Kasus
       </h2>
-      {caseData.map((caseItem, index) => (
-        <Card key={index} className="w-[350px]">
-          <CardHeader>
-            <CardTitle>Case History</CardTitle>
-            <CardDescription>Details of the case.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor={`title-${index}`}>Title</Label>
-                  <div>{caseItem.title || "---"}</div> {/* Menampilkan value Title */}
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor={`created_by-${index}`}>Created By</Label>
-                  <div>{caseItem.created_by || "---"}</div> {/* Menampilkan value Created By */}
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor={`created_at-${index}`}>Created At</Label>
-                  <div>{dayjs(caseItem.created_at).format("dddd, D MMMM YYYY") || "---"}</div> {/* Menampilkan value Created At */}
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor={`case_type-${index}`}>Case Type</Label>
-                  <div>{caseItem.case_type || "---"}</div> {/* Menampilkan value Case Type */}
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor={`description-${index}`}>Description</Label>
-                  <div>{caseItem.description || "---"}</div> {/* Menampilkan value Description */}
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor={`is_anonymous-${index}`}>Is Anonymous</Label>
-                  <div>{caseItem.is_anonymous ? "Yes" : "No"}</div> {/* Menampilkan value Is Anonymous */}
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor={`status-${index}`}>Status</Label>
-                  <div
-                    className={
-                      caseItem.status === "approved"
-                        ? "text-green-600 font-bold" // Warna hijau untuk approved
-                        : caseItem.status === "reject"
-                        ? "text-red-600 font-bold" // Warna merah untuk reject
-                        : "text-gray-600 font-bold" // Warna abu-abu untuk status null atau lainnya
-                    }
-                  >
-                    {caseItem.status || "---"}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        {caseData.map((caseItem, index) => (
+          <Card key={index} className="w-[350px]">
+            <CardHeader>
+              <CardTitle>Case History</CardTitle>
+              <CardDescription>Details of the case.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="grid w-full items-center gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`title-${index}`}>Title</Label>
+                    <div>{caseItem.title || "---"}</div> {/* Menampilkan value Title */}
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`created_by-${index}`}>Created By</Label>
+                    <div>{caseItem.created_by || "---"}</div> {/* Menampilkan value Created By */}
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`created_at-${index}`}>Created At</Label>
+                    <div>{dayjs(caseItem.created_at).format("dddd, D MMMM YYYY") || "---"}</div> {/* Menampilkan value Created At */}
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`case_type-${index}`}>Case Type</Label>
+                    <div>{caseItem.case_type || "---"}</div> {/* Menampilkan value Case Type */}
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`description-${index}`}>Description</Label>
+                    <div>{caseItem.description || "---"}</div> {/* Menampilkan value Description */}
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`is_anonymous-${index}`}>Is Anonymous</Label>
+                    <div>{caseItem.is_anonymous ? "Yes" : "No"}</div> {/* Menampilkan value Is Anonymous */}
+                  </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor={`status-${index}`}>Status</Label>
+                    <div
+                      className={
+                        caseItem.status === "approved"
+                          ? "text-green-600 font-bold" // Warna hijau untuk approved
+                          : caseItem.status === "reject"
+                          ? "text-red-600 font-bold" // Warna merah untuk reject
+                          : "text-gray-600 font-bold" // Warna abu-abu untuk status null atau lainnya
+                      }
+                    >
+                      {caseItem.status || "---"}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      ))}
+              </form>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
