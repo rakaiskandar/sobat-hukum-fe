@@ -60,7 +60,6 @@ const extractIcon = (name: string) => {
     if (name === "User") return <CircleUserRound width={20} />;
     if (name === "Case") return <File width={20} />;
     if (name === "Open Case") return <File width={20} />;
-    if (name === "Open Case") return <File width={20} />;
     if (name === "History") return <History width={20} />;
     if (name === "Profil") return <CircleUserRound width={20} />
   };
