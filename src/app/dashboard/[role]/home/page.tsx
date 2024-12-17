@@ -32,23 +32,27 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch user data for admin (only for admin)
-  const fetchUserData = async () => {
-    if (!session?.user?.accessToken) {
-      setError("No access token available.");
-      setLoading(false);
-      return;
-    }
+  // const fetchUserData = async () => {
+  //   if (!session?.user?.accessToken) {
+  //     setError("No access token available.");
+  //     setLoading(false);
+  //     return;
+  //   }
 
-    try {
-      const usersResponse = await axios.get("http://127.0.0.1:8000/api/v1/users/count", {
-        headers: { Authorization: `Bearer ${session?.user.accessToken}` },
-      });
-      setUserCount(usersResponse.data); // Directly set the simplified response
-    } catch (err) {
-      console.error("Error fetching user data:", err);
-      setError("Failed to fetch user data.");
-    }
-  };
+  //   try {
+  //     const usersResponse = await axios.get("http://localhost:8000/api/v1/users/count/", {
+  //       headers: { 
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${session?.user.accessToken}` 
+  //       },
+  //     });
+  //     setUserCount(usersResponse.data); // Directly set the simplified response
+  //     console.log(usersResponse.data);
+  //   } catch (err) {
+  //     console.error("Error fetching user data:", err);
+  //     setError("Failed to fetch user data.");
+  //   }
+  // };
 
   // Fetch case data (for both admin and non-admin users)
   const fetchCaseData = async () => {
@@ -59,8 +63,11 @@ export default function Dashboard() {
     }
 
     try {
-      const casesResponse = await axios.get("http://127.0.0.1:8000/api/v1/cases/count", {
-        headers: { Authorization: `Bearer ${session?.user.accessToken}` },
+      const casesResponse = await axios.get("http://localhost:8000/api/v1/cases/count/", {
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session?.user.accessToken}` 
+        },
       });
       setCaseCount(casesResponse.data);
     } catch (err) {
@@ -72,9 +79,9 @@ export default function Dashboard() {
   useEffect(() => {
     if (session) {
       // Fetch data based on user role
-      if (session.user.role === "admin") {
-        fetchUserData(); // Fetch user data for admins
-      }
+      // if (session?.user.role === "admin") {
+      //   fetchUserData(); // Fetch user data for admins
+      // }
       fetchCaseData(); // Fetch case data for both admin and non-admin
       setLoading(false); // Set loading to false if the user is not admin
     }
@@ -89,7 +96,7 @@ export default function Dashboard() {
 
       {session?.user.role === "admin" ? (
         <div className="space-y-6">
-          <h2 className="text-lg font-semibold text-secondary">Jumlah Pengguna</h2>
+          {/* <h2 className="text-lg font-semibold text-secondary">Jumlah Pengguna</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={userCount}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -99,7 +106,7 @@ export default function Dashboard() {
               <Legend />
               <Bar dataKey="count" fill="#4A90E2" />
             </BarChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer> */}
 
           <h2 className="text-lg font-semibold text-secondary">Jumlah Kasus Yang Diajukan</h2>
           <ResponsiveContainer width="100%" height={300}>
